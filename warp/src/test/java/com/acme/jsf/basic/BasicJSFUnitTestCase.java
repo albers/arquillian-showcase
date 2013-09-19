@@ -41,9 +41,13 @@ import org.jboss.shrinkwrap.api.asset.StringAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.descriptor.api.Descriptors;
 import org.jboss.shrinkwrap.descriptor.api.webapp30.WebAppDescriptor;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jboss.shrinkwrap.resolver.api.maven.PomEquippedResolveStage;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
+
+import com.acme.rewrite.RewriteConfigurationProvider;
 
 @RunWith(Arquillian.class)
 @WarpTest
@@ -58,6 +62,8 @@ public class BasicJSFUnitTestCase {
     @Deployment
     public static WebArchive createDeployment() {
         WebAppDescriptor webXml = Descriptors.create(WebAppDescriptor.class);
+        PomEquippedResolveStage maven = Maven.resolver().loadPomFromFile("pom.xml");
+
         return ShrinkWrap
                 .create(WebArchive.class, "basic.war")
                 .addClass(HitchhikersGuide.class)
@@ -66,15 +72,29 @@ public class BasicJSFUnitTestCase {
                 .addAsWebInfResource(new File("src/main/webapp/WEB-INF/beans.xml"))
                 .setWebXML(
                         new StringAsset(webXml.getOrCreateContextParam().paramName(ProjectStage.PROJECT_STAGE_PARAM_NAME)
-                                .paramValue(ProjectStage.Development.name()).up().exportAsString()));
+                                .paramValue(ProjectStage.Development.name()).up().exportAsString()))
+                // add Rewrite artifact & configuration
+				.addAsLibraries(maven.resolve("org.ocpsoft.rewrite:rewrite-servlet").withoutTransitivity().asFile())
+       			.addClass(RewriteConfigurationProvider.class);
     }
 
     @Test
     @RunAsClient
-    public void shouldExecutePage() throws Exception {
+    public void shouldExecutePage_direct() throws Exception {
         Warp.initiate(new Activity() {
             public void perform() {
                 browser.navigate().to(contextPath + "index.jsf");
+            }
+        }).inspect(new verifyBeanValueOnInitialPage());
+    }
+
+    @Test
+    @RunAsClient
+    // fails with ClientWarpExecutionException: deenriching response failed: The response payload with serialId [...] was never registered
+    public void shouldExecutePage_usingUrlAlias() throws Exception {
+        Warp.initiate(new Activity() {
+            public void perform() {
+                browser.navigate().to(contextPath + "index");
             }
         }).inspect(new verifyBeanValueOnInitialPage());
     }
