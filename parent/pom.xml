@@ -25,8 +25,8 @@
         <version.arquillian_container_openejb>1.0.0.CR2-SNAPSHOT</version.arquillian_container_openejb>
         <version.arquillian_container_openejb_tomee>1.0.0-beta-3-SNAPSHOT</version.arquillian_container_openejb_tomee>
         <version.arquillian_container_resin>1.0.0-SNAPSHOT</version.arquillian_container_resin>
-        <version.arquillian_drone>1.1.1.Final</version.arquillian_drone>
-        <version.arquillian_warp>1.0.0.Alpha4</version.arquillian_warp>
+        <version.arquillian_drone>1.2.1.Final</version.arquillian_drone>
+        <version.arquillian_warp>1.0.0.Alpha5</version.arquillian_warp>
         <version.arquillian_ajocado>1.0.0.CR2</version.arquillian_ajocado>
         <version.glassfish>3.1.2</version.glassfish>
         <version.hamcrest>1.2</version.hamcrest>

@@ -5,7 +5,7 @@ Its [rewrite branch](https://github.com/albers/arquillian-showcase/tree/rewrite)
 
 ## Changes made 
 
-1. updated some dependencies in _arquillian-showcase-parent_ to current versions (Arquillian Warp 1.0.0.Alpha4)
+1. updated some dependencies in _arquillian-showcase-parent_ to current versions (Arquillian Warp 1.0.0.Alpha5)
 2. added a rewrite configuration and a failing test to the _arquillian-showcase-warp_ project
 
 See git changelog for details.
